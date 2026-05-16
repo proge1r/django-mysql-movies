@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KINOJUMP - Movies</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h1 class="logo">KINO<span>JUMP</span></h1>
+        <a href="{% url 'movie_create' %}" class="btn-add">+ ADD MOVIE</a>
+    </div>
+
+    <div class="sorting-bar">
+        <span>Sort by:</span>
+        <a href="?sort=title" style="color: {% if current_sort == 'title' %}#ff9900{% else %}#fff{% endif %};">Title</a>
+        <span style="color: #333;">|</span>
+        <a href="?sort=rating" style="color: {% if current_sort == 'rating' %}#ff9900{% else %}#fff{% endif %};">Rating</a>
+        <span style="color: #333;">|</span>
+        <a href="?sort=release_date" style="color: {% if current_sort == 'release_date' %}#ff9900{% else %}#fff{% endif %};">Release Date</a>
+    </div>
+
+    <h2>All Movies</h2>
+
+    <div class="grid-container">
+        {% for movie in movies %}
+            {% include 'movies/includes/movie_card.html' with movie=movie %}
+        {% empty %}
+            <p style="color: #888;">No movies found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
