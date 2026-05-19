@@ -5,10 +5,21 @@
         {% else %}
             <div class="no-poster">No Poster</div>
         {% endif %}
-        <div class="rating-badge">★ {{ movie.rating }}</div>
     </a>
     <div class="info-box">
-        <a href="{% url 'movie_detail' movie.id %}" class="movie-title">{{ movie.title }}</a>
-        <div class="movie-meta">{{ movie.release_date|date:"Y" }}, Movie</div>
+        <div style="color: #ff9900; font-weight: bold; font-size: 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;">
+            ★ {{ movie.rating }}
+        </div>
+        <a href="{% url 'movie_detail' movie.id %}" class="movie-title" style="margin-bottom: 3px; display: block;">
+            {{ movie.title }}
+        </a>
+        <div class="movie-meta">
+            {{ movie.release_date|date:"Y" }}, 
+            {% for genre in movie.genres.all %}
+                {{ genre.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                No genres
+            {% endfor %}
+        </div>
     </div>
 </div>

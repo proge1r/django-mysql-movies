@@ -96,19 +96,6 @@ body {
     font-size: 14px;
 }
 
-.rating-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(0,0,0,0.8);
-    color: #ff9900;
-    padding: 4px 8px;
-    font-weight: bold;
-    font-size: 12px;
-    border-radius: 4px;
-    border: 1px solid #ff9900;
-}
-
 .info-box {
     padding: 12px;
     display: flex;
@@ -238,4 +225,48 @@ label {
     width: 100%;
     font-size: 16px;
     margin-top: 10px;
+}
+
+.genre-badge {
+    background: #333;
+    color: #ff9900;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.review-section {
+    margin-top: 40px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.review-card {
+    background: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.review-user {
+    color: #ff9900;
+    font-weight: bold;
+}
+
+.btn-delete-review {
+    color: #e50914;
+    text-decoration: none;
+    font-size: 13px;
 }

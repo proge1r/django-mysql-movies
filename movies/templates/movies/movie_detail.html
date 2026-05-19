@@ -19,15 +19,53 @@
             </div>
             <div class="detail-info">
                 <h1 style="margin: 0 0 10px 0; font-size: 32px;">{{ movie.title }}</h1>
-                <div class="detail-rating">Rating: ★ {{ movie.rating }} / 5</div>
+                <div class="detail-rating">IMDb Rating: {{ movie.rating }} / 10</div>
                 <p style="color: #888; margin: 5px 0;"><strong>Release Date:</strong> {{ movie.release_date }}</p>
-                <h3 style="margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">Description</h3>
+                
+                <p style="margin: 15px 0;">
+                    <strong>Genres:</strong>
+                    {% for genre in movie.genres.all %}
+                        <span class="genre-badge">{{ genre.name }}</span>
+                    {% empty %}
+                        <span style="color: #555;">No genres</span>
+                    {% endfor %}
+                </p>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">Description</h3>
                 <p style="color: #ccc; line-height: 1.6; margin: 0;">{{ movie.description }}</p>
                 <div class="btn-group">
                     <a href="{% url 'movie_edit' movie.id %}" class="btn-edit">Edit info</a>
                     <a href="{% url 'movie_delete' movie.id %}" class="btn-delete">Delete movie</a>
                 </div>
             </div>
+        </div>
+
+        <div class="review-section">
+            <h2>Reviews ({{ reviews_count }})</h2>
+            
+            <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <h4 style="margin-top: 0; margin-bottom: 15px;">Leave a review</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <button type="submit" class="btn-submit" style="width: auto; padding: 10px 20px;">Submit Review</button>
+                </form>
+            </div>
+
+            {% for review in reviews %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-user">{{ review.username }}</span>
+                        <span>{{ review.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <p style="color: #ddd; margin: 5px 0; line-height: 1.5;">{{ review.text }}</p>
+                    <div style="text-align: right; margin-top: 10px;">
+                        <a href="{% url 'review_delete' review.id %}" class="btn-delete-review">Delete</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: #666;">No reviews yet. Be the first to review!</p>
+            {% endfor %}
         </div>
     </div>
 </body>

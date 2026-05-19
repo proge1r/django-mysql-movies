@@ -1,19 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Movie
-from .forms import MovieForm
+from .models import Movie, Review
+from .forms import MovieForm, ReviewForm
 
 def movie_list(request):
     sort_by = request.GET.get('sort', 'title')
-    
     sort_mapping = {
         'rating': '-rating',
         'title': 'title',
         'release_date': '-release_date'
     }
-    
     order_field = sort_mapping.get(sort_by, 'title')
     movies = Movie.objects.all().order_by(order_field)
-    
     return render(request, 'movies/movie_list.html', {
         'movies': movies,
         'current_sort': sort_by
@@ -21,7 +18,24 @@ def movie_list(request):
 
 def movie_detail(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
-    return render(request, 'movies/movie_detail.html', {'movie': movie})
+    reviews = movie.reviews.all().order_by('-created_at')
+    
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.movie = movie
+            review.save()
+            return redirect('movie_detail', pk=movie.pk)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'movies/movie_detail.html', {
+        'movie': movie,
+        'reviews': reviews,
+        'review_form': form,
+        'reviews_count': reviews.count()
+    })
 
 def movie_create(request):
     if request.method == "POST":
@@ -50,3 +64,9 @@ def movie_delete(request, pk):
         movie.delete()
         return redirect('movie_list')
     return render(request, 'movies/movie_confirm_delete.html', {'movie': movie})
+
+def review_delete(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    movie_pk = review.movie.pk
+    review.delete()
+    return redirect('movie_detail', pk=movie_pk)
